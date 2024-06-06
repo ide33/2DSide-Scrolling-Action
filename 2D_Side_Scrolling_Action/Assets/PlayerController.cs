@@ -10,6 +10,15 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rigidbody2D;  //オブジェクト・コンポーネント参照
     private SpriteRenderer spriteRenderer;
+    public float flap = 500f;
+    public float scroll = 5f;
+    float direction = 0f;
+    Rigidbody2D rb2d;
+    bool jump = false;
+
+    public CheckGround ground;
+
+    private bool isGround = false;
 
 
 
@@ -24,13 +33,43 @@ public class PlayerController : MonoBehaviour
 
         //変数初期化
         rightFacing = true;  //最初は右向き
+
+         //コンポーネント読み込み
+        rb2d = GetComponent<Rigidbody2D>();
     }
 
     void Update()  //Update(１フレームごとに１度ずつ実行)
 
     {
+        isGround = ground.IsGround();
+
         this.transform.rotation = Quaternion.Euler(0, 0, 0);  //プレイヤーの回転を停止させる
         MoveUpdate();  //左右移動処理
+
+        //キーボード操作
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            direction = 1f;
+        }
+        else if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            direction = -1f;
+        }
+        else
+        {
+            direction = 0f;
+        }
+
+
+        //キャラのy軸のdirection方向にscrollの力をかける
+        rb2d.velocity = new Vector2(scroll * direction, rb2d.velocity.y);
+
+        //ジャンプ判定
+        if (Input.GetKeyDown("space") && !jump)
+        {
+            rb2d.AddForce(Vector2.up * flap);
+            jump = true;
+        }
     }
 
     /// <summary>
@@ -69,6 +108,16 @@ public class PlayerController : MonoBehaviour
         velocity.x = xSpeed;  //X方向の速度を入力から決定
         rigidbody2D.velocity = velocity;  //計算した移動速度ベクトルをRigidBody2Dに反映
     }
+
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            jump = false;
+        }
+    }
+    
+    
 
 
 }
