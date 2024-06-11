@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public class PlayerController : MonoBehaviour
 {
-    private Rigidbody2D rigidbody2D;  //オブジェクト・コンポーネント参照
+    private Rigidbody2D rb2D;  //オブジェクト・コンポーネント参照
     private SpriteRenderer spriteRenderer;
     public float flap = 500f;
     public float scroll = 5f;
@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     public CheckGround ground;
 
     private bool isGround = false;
+    public bool isGrounded;
 
 
 
@@ -28,7 +29,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()  //Start(オブジェクト有効時に１度実行)
     {
-        rigidbody2D = GetComponent<Rigidbody2D>();   //コンポーネント参照取得
+        rb2D = GetComponent<Rigidbody2D>();   //コンポーネント参照取得
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         //変数初期化
@@ -104,9 +105,9 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()  //FixedUpdate (一定時間ごとに１度ずつ実行・物理演算用)
     {
-        Vector2 velocity = rigidbody2D.velocity;  //移動速度ベクトルを現在値から取得
+        Vector2 velocity = rb2D.velocity;  //移動速度ベクトルを現在値から取得
         velocity.x = xSpeed;  //X方向の速度を入力から決定
-        rigidbody2D.velocity = velocity;  //計算した移動速度ベクトルをRigidBody2Dに反映
+        rb2D.velocity = velocity;  //計算した移動速度ベクトルをRigidBody2Dに反映
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -116,8 +117,4 @@ public class PlayerController : MonoBehaviour
             jump = false;
         }
     }
-    
-    
-
-
 }
