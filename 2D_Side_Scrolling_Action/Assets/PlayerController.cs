@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// プレイヤー操作・制御クラス
@@ -44,8 +45,23 @@ public class PlayerController : MonoBehaviour
     {
         isGround = ground.IsGround();
 
+        // このY座標（bottomY）より下へ落ちたらスタートへ戻す
+        float bottomY = Camera.main.transform.position.y - Camera.main.orthographicSize * 2;
+        // 忍者のY座標がbottomYより低い
+        if (gameObject.transform.position.y < bottomY)
+        {
+            // 現在のシーンを再読み込み
+            int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+            SceneManager.LoadScene(sceneIndex);
+        }
+
         this.transform.rotation = Quaternion.Euler(0, 0, 0);  //プレイヤーの回転を停止させる
         MoveUpdate();  //左右移動処理
+
+        //監督スクリプトにプレイヤーがリスポーンしたことを伝える
+        GameObject Manager = GameObject.Find("GameManager");
+        Manager.GetComponent<GameManager>().(); 
+        
 
         //キーボード操作
         if (Input.GetKey(KeyCode.RightArrow))
