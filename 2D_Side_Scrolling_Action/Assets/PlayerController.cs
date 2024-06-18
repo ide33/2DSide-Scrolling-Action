@@ -43,26 +43,29 @@ public class PlayerController : MonoBehaviour
     void Update()  //Update(１フレームごとに１度ずつ実行)
 
     {
+        Vector2 posi = this.transform.position;
+        Debug.Log("x = -10" + posi.x);
+        Debug.Log("y = -3.3" + posi.y);
+
         isGround = ground.IsGround();
 
         // このY座標（bottomY）より下へ落ちたらスタートへ戻す
         float bottomY = Camera.main.transform.position.y - Camera.main.orthographicSize * 2;
-        // 忍者のY座標がbottomYより低い
+        // プレイヤーのY座標がbottomYより低い
         if (gameObject.transform.position.y < bottomY)
         {
-            // 現在のシーンを再読み込み
-            int sceneIndex = SceneManager.GetActiveScene().buildIndex;
-            SceneManager.LoadScene(sceneIndex);
+            Vector2 posi = this.transform.position;
+            posi = new Vector2(10f,10f);
+            this.transform.position = posi;
+
+            GameObject manager = GameObject.Find("GameManager");
+            manager.GetComponent<GameManager>().DecreaseHP();
         }
 
         this.transform.rotation = Quaternion.Euler(0, 0, 0);  //プレイヤーの回転を停止させる
         MoveUpdate();  //左右移動処理
 
-        //監督スクリプトにプレイヤーがリスポーンしたことを伝える
-        GameObject Manager = GameObject.Find("GameManager");
-        Manager.GetComponent<GameManager>().(); 
         
-
         //キーボード操作
         if (Input.GetKey(KeyCode.RightArrow))
         {
