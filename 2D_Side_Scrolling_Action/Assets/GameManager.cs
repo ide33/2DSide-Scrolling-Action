@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public void OnGoal()
+    {
+        Debug.Log("ゴール");
+    }
     GameObject hpGauge;
     void Start()
     {

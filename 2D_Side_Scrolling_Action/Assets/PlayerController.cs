@@ -27,17 +27,19 @@ public class PlayerController : MonoBehaviour
     //移動関連変数
     [HideInInspector] public float xSpeed; //X方向移動速度
     [HideInInspector] public bool rightFacing;  //向いている方向(true.右向き false:左向き)
+    private Transform stratPosition;
 
     void Start()  //Start(オブジェクト有効時に１度実行)
     {
-        rb2D = GetComponent<Rigidbody2D>();   //コンポーネント参照取得
+        rb2d = GetComponent<Rigidbody2D>();   //コンポーネント参照取得
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         //変数初期化
         rightFacing = true;  //最初は右向き
 
          //コンポーネント読み込み
-        rb2d = GetComponent<Rigidbody2D>();
+        rb2D = GetComponent<Rigidbody2D>();
+        stratPosition = gameObject.transform;
     }
 
     void Update()  //Update(１フレームごとに１度ずつ実行)
@@ -54,9 +56,8 @@ public class PlayerController : MonoBehaviour
         // プレイヤーのY座標がbottomYより低い
         if (gameObject.transform.position.y < bottomY)
         {
-            Vector2 posi = this.transform.position;
-            posi = new Vector2(10f,10f);
-            this.transform.position = posi;
+            Vector2 startPosition = new Vector2(-10f,-3.3f);
+            transform.position = startPosition;
 
             GameObject manager = GameObject.Find("GameManager");
             manager.GetComponent<GameManager>().DecreaseHP();
