@@ -15,14 +15,6 @@ public class PlayerController : MonoBehaviour
     public float scroll = 5f;
     float direction = 0f;
     Rigidbody2D rb2d;
-    bool jump = false;
-
-    public CheckGround ground;
-
-    private bool isGround = false;
-    public bool isGrounded;
-
-
 
     //移動関連変数
     [HideInInspector] public float xSpeed; //X方向移動速度
@@ -49,7 +41,6 @@ public class PlayerController : MonoBehaviour
         Debug.Log("x = -10" + posi.x);
         Debug.Log("y = -3.3" + posi.y);
 
-        isGround = ground.IsGround();
 
         // このY座標（bottomY）より下へ落ちたらスタートへ戻す
         float bottomY = Camera.main.transform.position.y - Camera.main.orthographicSize * 2;
@@ -84,13 +75,6 @@ public class PlayerController : MonoBehaviour
 
         //キャラのy軸のdirection方向にscrollの力をかける
         rb2d.velocity = new Vector2(scroll * direction, rb2d.velocity.y);
-
-        //ジャンプ判定
-        if (Input.GetKeyDown("space") && !jump)
-        {
-            rb2d.AddForce(Vector2.up * flap);
-            jump = true;
-        }
     }
 
     /// <summary>
@@ -128,13 +112,5 @@ public class PlayerController : MonoBehaviour
         Vector2 velocity = rb2D.velocity;  //移動速度ベクトルを現在値から取得
         velocity.x = xSpeed;  //X方向の速度を入力から決定
         rb2D.velocity = velocity;  //計算した移動速度ベクトルをRigidBody2Dに反映
-    }
-
-    void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.gameObject.CompareTag("Ground"))
-        {
-            jump = false;
-        }
     }
 }

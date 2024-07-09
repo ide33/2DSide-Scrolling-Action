@@ -1,16 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GoalController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    private void OnTriggerEnter2D(Collider2D _collision)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if(_collision.CompareTag("Player"))
+        // プレイヤーにタグを設定し、タグを確認する
+        if (other.CompareTag("Player"))
         {
-            GameManager gamemanager = GameObject.FindObjectOfType<GameManager>();
-            gamemanager.OnGoal();
+            // クリア画面のシーンに移行する
+            SceneManager.LoadScene("ClearScene");
         }
     }
 }
